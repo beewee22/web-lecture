@@ -1,0 +1,22 @@
+{
+  "name": "hiyoko-lecture",
+  "version": "0.0.0",
+  "description": "수업을 진행하기 전에",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beewee22/web-lecture.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/beewee22/web-lecture/issues"
+  },
+  "homepage": "https://github.com/beewee22/web-lecture#readme",
+  "dependencies": {
+    "static-server": "^2.2.1"
+  }
+}
