@@ -12,11 +12,11 @@
   <body>
     <table>
       <tr>
-        <td colspan="4"><input type="text" id="display" /></td>
+        <td colspan="4"><input type="text" id="display" disabled /></td>
       </tr>
       <tr>
         <td colspan="3">
-          <input type="text" id="input" onkeyup="onclickBtn(event)" />
+          <input type="text" id="inputPannel" onkeyup="onclickBtn(event)" />
         </td>
         <th>
           <input type="button" value="enter" onclick="onclickBtn(event)" />
@@ -27,69 +27,113 @@
         <th onclick="onclickBtn(event)">CE</th>
         <th>C</th>
         <th>DEL</th>
-        <th onclick="calc('/')">/</th>
+        <th onclick="setCalculator('/')">/</th>
       </tr>
 
       <tr>
-        <th onclick="add(7)">7</th>
-        <th onclick="add(8)">8</th>
-        <th onclick="add(9)">9</th>
-        <th onclick="calc('*')">*</th>
+        <th onclick="appendValue(7)">7</th>
+        <th onclick="appendValue(8)">8</th>
+        <th onclick="appendValue(9)">9</th>
+        <th onclick="setCalculator('*')">*</th>
       </tr>
 
       <tr>
-        <th onclick="add(4)">4</th>
-        <th onclick="add(5)">5</th>
-        <th onclick="add(6)">6</th>
-        <th onclick="calc('-')">-</th>
+        <th onclick="appendValue(4)">4</th>
+        <th onclick="appendValue(5)">5</th>
+        <th onclick="appendValue(6)">6</th>
+        <th onclick="setCalculator('-')">-</th>
       </tr>
 
       <tr>
-        <th onclick="add(1)">1</th>
-        <th onclick="add(2)">2</th>
-        <th onclick="add(3)">3</th>
-        <th onclick="calc('+')">+</th>
+        <th onclick="appendValue(1)">1</th>
+        <th onclick="appendValue(2)">2</th>
+        <th onclick="appendValue(3)">3</th>
+        <th onclick="setCalculator('+')">+</th>
       </tr>
 
       <tr>
         <th></th>
-        <td onclick="add(0)">0</td>
+        <td onclick="appendValue(0)">0</td>
         <th>.</th>
-        <th onclick="calc('')">=</th>
+        <th onclick="calculate()">=</th>
       </tr>
     </table>
   </body>
 
   <script>
-    function onclickBtn(event) {
-      if (event.keyCode && event.keyCode !== 13) {
-        return;
-      }
-      const checkInput = document.getElementById('input');
-      const boxValue = checkInput.value;
-      console.log('boxValue', boxValue);
-      checkInput.focus();
-      if (!boxValue) {
-        return;
-      }
-      checkInput.value = null;
+    // 1. 사칙연산
+    // 2. (a) (연산자) (b) = (result)
+    // 연산자 입력이 들어온 뒤, b에 값이 없으면 a를, 있으면 b를 inputPannel에 보여준다
+    // 연산자 입력 이전의 입력은 a, 이후의 입력은 b
 
-      // 숫자입력이후 enter 나 버튼 enter을 누르면 식을 추가시켜주는 함수
+    let variableA = 0,
+      variableB = 0;
+    let _operator = null;
+    let result = null;
+
+    function isOperatorSetted() {
+      return !!_operator;
     }
 
-    function add(char) {
-      let input = document.getElementById('input');
-      input.value = input.value + char;
-
-      // 버튼누르면 input 창에 숫자를 추가시켜주는 함수
+    function setOperator(op) {
+      _operator = op;
     }
 
-    function calc(char) {
-      let display = document.getElementById('display');
-      let input = document.getElementById('input');
-      let result = display.value + input.value + char;
-      display.value = result;
-      input.value = eval(result + '0');
+    function deleteOperator() {
+      setOperator(null);
+    }
+
+    function addByString(a, b) {
+      return parseInt(a.toString() + b.toString());
+    }
+
+    function appendValue(char) {
+      if (!isOperatorSetted()) {
+        variableA = addByString(variableA, char);
+      } else {
+        variableB = addByString(variableB, char);
+      }
+      updateInputPannel();
+    }
+
+    function updateInputPannel() {
+      let inputPannel = document.getElementById('inputPannel');
+      if (isOperatorSetted()) {
+        if (variableB) {
+          inputPannel.value = variableB;
+          return;
+        }
+      }
+      inputPannel.value = variableA;
+    }
+
+    function updateDisplayPannel() {
+      let displayString = '';
+      if (variableA) {
+        displayString += variableA.toString();
+        if (isOperatorSetted()) {
+          displayString += _operator;
+
+          if (variableB) {
+            displayString += variableB.toString();
+          }
+        }
+      }
+      document.getElementById('display').value = displayString;
+    }
+
+    function setCalculator(oparator) {
+      setOperator(oparator);
+      updateInputPannel();
+      updateDisplayPannel();
+    }
+
+    function calculate() {
+      variableA = eval(`${variableA}${_operator}${variableB}`);
+      variableB = 0;
+      deleteOperator();
+      updateInputPannel();
+      updateDisplayPannel();
     }
   </script>
 </html>
