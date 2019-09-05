@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<style>
+
+</style>
+
+<body>
+
+
+
+    <table>
+        <tr>
+
+            <td colspan="4"><input type="text" id="display"></td>
+
+        </tr>
+        <tr>
+            <td colspan="3"><input type="text" id="input" onkeyup="onclickBtn(event)"></td>
+            <th> <input type="button" value="enter" onclick="onclickBtn(event)"> </th>
+        </tr>
+
+        <tr>
+            <th onclick="onclickBtn(event)">CE</th>
+            <th>C</th>
+            <th>DEL</th>
+            <th onclick="calc('/')">/</th>
+        </tr>
+
+        <tr>
+            <th onclick="add(7)">7</th>
+            <th onclick="add(8)">8</th>
+            <th onclick="add(9)">9</th>
+            <th onclick="calc('*')">*</th>
+        </tr>
+
+        <tr>
+            <th onclick="add(4)">4</th>
+            <th onclick="add(5)">5</th>
+            <th onclick="add(6)">6</th>
+            <th onclick="calc('-')">-</th>
+        </tr>
+
+        <tr>
+            <th onclick="add(1)">1</th>
+            <th onclick="add(2)">2</th>
+            <th onclick="add(3)">3</th>
+            <th onclick="calc('+')">+</th>
+        </tr>
+
+        <tr>
+            <th> </th>
+            <td onclick="add(0)">0</dh>
+            <th>.</th>
+            <th onclick="calc('')">=</th>
+        </tr>
+
+    </table>
+
+
+</body>
+
+<script>
+
+
+    function onclickBtn(event) {
+        if (event.keyCode && event.keyCode !== 13) {
+            return;
+        }
+        const checkInput = document.getElementById('input');
+        const boxValue = checkInput.value;
+        console.log('boxValue', boxValue);
+        checkInput.focus();
+        if (!boxValue) {
+            return;
+        }
+        checkInput.value = null;
+
+        // 숫자입력이후 enter 나 버튼 enter을 누르면 식을 추가시켜주는 함수
+    }
+
+    function add(char) {
+        let input = document.getElementById('input');
+        input.value = input.value + char;
+
+
+        // 버튼누르면 input 창에 숫자를 추가시켜주는 함수 
+    }
+
+    function calc(char) {
+
+        let display = document.getElementById('display');
+        let input = document.getElementById('input');
+        let result = display.value + input.value + char;
+        display.value = result;
+        input.value = eval(result + "0");
+
+
+    }
+
+
+
+
+
+</script>
+
+</html>
